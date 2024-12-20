@@ -38,5 +38,10 @@ public class CarParkRepository {
         
         return null;
     }
+
+    public void addFavourite(String user, String favourites) {
+        String sql = "UPDATE customers SET favourites = ? WHERE username = ?";
+        jdbcTemplate.update(sql, favourites, user);
+    }
     
 }

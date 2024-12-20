@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,9 +38,9 @@ public class FrontController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         try {
-            
+
             List<CarPark> filteredCarParks = CarParkSvc.filterCarParks(freeParking, nightParking, height, page, size);
-            
+
             return ResponseEntity.ok(filteredCarParks);
         } catch (Exception e) {
             return ResponseEntity.status(404).body("No parking space found");
@@ -67,19 +67,32 @@ public class FrontController {
             return ResponseEntity.status(404).body("No parking space found");
         }
     }
+
     @GetMapping("/favourites")
     @ResponseBody
-    public ResponseEntity<?> filterCarParks(
+    public ResponseEntity<?> getFavourites(
             @RequestParam(required = true) String user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         try {
-            
             List<CarPark> filteredCarParks = CarParkSvc.filterFavourites(user, page, size);
             System.out.println("Output ->" + filteredCarParks);
             return ResponseEntity.ok(filteredCarParks);
         } catch (Exception e) {
             return ResponseEntity.status(404).body("No parking space found");
+        }
+    }
+
+    @PostMapping("/favourites")
+    @ResponseBody
+    public ResponseEntity<?> postFavourite(
+            @RequestParam String user,
+            @RequestBody String favourites) {
+        try {
+            CarParkSvc.addFavourite(user, favourites);
+            return ResponseEntity.status(201).body("Added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Failed to add favourites");
         }
     }
 }

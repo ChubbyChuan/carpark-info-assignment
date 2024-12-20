@@ -106,5 +106,9 @@ public class CarParkService {
     
         return sb.toString();
     }
+
+    public void addFavourite(String user, String favourites) {
+        carParkRepo.addFavourite(user, favourites);
+    }
  
 }
