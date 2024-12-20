@@ -38,9 +38,9 @@ public class FrontController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         try {
-            System.out.println("Controller Triggered");
+            
             List<CarPark> filteredCarParks = CarParkSvc.filterCarParks(freeParking, nightParking, height, page, size);
-            System.out.println("Output ->" + filteredCarParks);
+            
             return ResponseEntity.ok(filteredCarParks);
         } catch (Exception e) {
             return ResponseEntity.status(404).body("No parking space found");
@@ -74,7 +74,7 @@ public class FrontController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         try {
-            System.out.println("Controller Triggered");
+            
             List<CarPark> filteredCarParks = CarParkSvc.filterFavourites(user, page, size);
             System.out.println("Output ->" + filteredCarParks);
             return ResponseEntity.ok(filteredCarParks);

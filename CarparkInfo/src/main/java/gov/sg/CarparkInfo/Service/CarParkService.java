@@ -31,6 +31,19 @@ public class CarParkService {
         return carParkRepo.findCarParks(sqlString);
     }
 
+    public List<CarPark> filterFavourites(String user, int page, int size) {
+        System.out.println("Svc ->" + user + page + size);
+
+        String favStr = carParkRepo.findFavourites(user);
+        String [] favArray = favStr.split(",");
+        System.out.print("Retrieve String ->" + favStr);
+        String sqlString = buildQueryString(favArray, page, size);
+
+        List<CarPark> allCarParks = carParkRepo.findCarParks(sqlString);
+
+        return allCarParks;
+    }
+
     private String buildQueryString(String freeParking, String nightParking, Float height, int page, int size) {
 
         StringBuilder sb = new StringBuilder("SELECT * FROM CAR_PARK WHERE 1=1"); // the 1+1 is for me to append
@@ -79,8 +92,19 @@ public class CarParkService {
         return sb.toString();
     }
 
-    public List<CarPark> filterFavourites(String user, int page, int size) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'filterFavourites'");
+    public String buildQueryString(String[] favArray, int page, int size) {
+        StringBuilder sb = new StringBuilder("SELECT * FROM car_park WHERE ");
+
+        for (int i = 0; i < favArray.length; i++) {
+            sb.append("car_park_no = '").append(favArray[i]).append("'");
+            if (i < favArray.length - 1) {
+                sb.append(" OR ");
+            }
+        }
+        int offset = page * size;
+        sb.append(" LIMIT ").append(size).append(" OFFSET ").append(offset);
+    
+        return sb.toString();
     }
+ 
 }
